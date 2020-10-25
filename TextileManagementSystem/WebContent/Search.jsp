@@ -4,8 +4,8 @@
 <%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.*" %>
 
-<%@ page import="java.util.*" %> 
 <html>
 <head>
   
@@ -74,10 +74,10 @@ font-size:25px;
 
 
 <% 
-int count = 0;
+
 try {
 	
-	
+
 	Statement st;
 	Connection conn = null;
 	String url = "jdbc:mysql://localhost:3306/";
@@ -91,19 +91,20 @@ try {
 		  
 		  
 		  String  orderID  = request.getParameter("orderID");
+		  int count = 0;
 		  String query = "select * from `order` where orderID = '" +orderID + "' ";
 		  
-		   		
+		
 		 
 		  st = connection.createStatement();
 		  
 		  ResultSet  rs = st.executeQuery(query);
 
-		 	
-			
+		  
 		  while(rs.next()){
+			
 			  count++;
-			  %>
+      	  %>
 			  <tr>
 			  <td><%=rs.getString("orderID") %></td>
 			  <td><%=rs.getString("product") %></td>
@@ -125,25 +126,26 @@ try {
 				</td>
 			
 			 </tr>
+			 
+		
 			  <% 
-			  
+		  }
 			  if (count == 0) {
 				 
-		            %>
+				  %>
 		            <tr>
-		                <td colspan=4 align="center"
-		                    style="background-color:#eeffee"><b>No Record Found..</b></td>
+		                <td colspan=9 align="center"
+		                    style="background-color:#add8e6"><b>No Record Found..</b></td>
 		            </tr>
 		             <%           
-		            }
 		           
-		  }
+		            }
+			  %>
+			  
+			   <% 
+		  
 
-}
-
-
-
-catch(Exception e){
+}catch(Exception e){
 	  e.printStackTrace();
 	  
 	
@@ -151,13 +153,13 @@ catch(Exception e){
 		  %>
 		  </table>
 	</div>
-		  <br>
+		  <br><br><br><br>
 	<a href="homeView.jsp" style="margin: 0 auto; display: block; text-align: center">Continue
 		Shopping</a>
 
 
 </div>
-
+<br><br><br><br>
 	<jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
 
 </body>

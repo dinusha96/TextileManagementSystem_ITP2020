@@ -50,7 +50,7 @@ hr{
 	 
 	%>
 
-	<form method="POST" action="UpdateOrderServlet">
+	<form method="POST" action="UpdateOrderServlet" onsubmit="myUpdate()">
 	<div class="container">
 	
 		
@@ -87,24 +87,24 @@ hr{
 				 <%java.text.DateFormat df = new java.text.SimpleDateFormat("dd/MM/yyyy"); %>
 				<%= df.format(new java.util.Date()) %> <br><br>
 			
-			<br>
+			
 			<label for="status" >Order Status</label><br>
 				<%=order.getStatus()%> 
 			
 			
 		</div>
 		
-		 <br><br><br><br><br><br>
+		 <br><br><br>
 		<div style="margin-left:-5px;">
 			<input type="hidden" name="orderID" value="<%=order.getOrderID()%>" />
-			 <input type="submit" class="update-button value=" value="Save Changes" />
+			 <input type="submit" class="update-button" value="Update Order" />
 		</div>	
 		<br>
 	
 
 	</form>   
-	          <div style="margin-left:720px;margin-top:-75px;">
-				<form method="POST" action="DeleteOrderServlet">
+	          <div style="margin-left:800px;margin-top:-75px;">
+				<form method="POST" action="DeleteOrderServlet" onsubmit="myCancel()" >
 					<input type="hidden" name="orderID" value="<%=order.getOrderID()%>" /> 
 					<input type="submit" value="Cancel Order" class="delete-button"/>
 						
@@ -117,5 +117,8 @@ hr{
  
 </div>
 <jsp:include page="/WEB-INF/views/footer.jsp"></jsp:include>
+
+<script type="text/javascript" src="javascript/confirmMess.js"></script>
+<script type="text/javascript" src="javascript/cancelMess.js"></script>
 </body>
 </html>
