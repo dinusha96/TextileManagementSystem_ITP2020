@@ -1,18 +1,23 @@
 package com.itp.pdf;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
- 
+
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -28,8 +33,10 @@ public class GeneratePDF {
 	/**
 	 * @param args
 	 * @throws SQLException 
+	 * @throws IOException 
+	 * @throws MalformedURLException 
 	 */
-	public static Document createPDF(String file) throws SQLException {
+	public static Document createPDF(String file) throws SQLException, DocumentException,MalformedURLException, IOException {
  
 		Document document = null;
  
@@ -39,9 +46,11 @@ public class GeneratePDF {
 			document.open();
  
 			addMetaData(document);
+			
+			addImage(document);
  
 			addTitlePage(document);
- 
+			
 			createTable(document);
  
 			document.close();
@@ -58,27 +67,42 @@ public class GeneratePDF {
  
 	
 	private static void addMetaData(Document document) {
-		document.addTitle("Generate PDF report");
-		document.addSubject("Generate PDF report");
+		document.addTitle("Order PDF report");
+		document.addSubject("Order PDF report");
 		document.addAuthor("Sona Nizer");
 		document.addCreator("Sona Nizer");
 	}
 	
 	private static void addTitlePage(Document document)
-			throws DocumentException {
+			throws DocumentException, MalformedURLException, IOException {
  
 		Paragraph preface = new Paragraph();
-		creteEmptyLine(preface, 1);
-		preface.add(new Paragraph("WORLD OF FASHION", TIME_ROMAN));
+		creteEmptyLine(preface, 3);
+		
+		 Font f =  FontFactory.getFont(FontFactory.TIMES, 30f, Font.BOLD);
+	
+		 
+		preface.add(new Paragraph("WORLD OF FASHION", f));
  
 		creteEmptyLine(preface, 1);
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		
+	
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		preface.add(new Paragraph("Order Report created on "
 				+ simpleDateFormat.format(new Date()), TIME_ROMAN_SMALL));
 		document.add(preface);
  
 		
 	}
+	
+	private static void addImage(Document document) throws MalformedURLException, IOException, DocumentException {
+		Image img = Image.getInstance("C:/Users/Nizer/Desktop/logo1.jpeg");
+		
+        img.setAlignment(Element.ALIGN_CENTER);
+        document.add(img);
+		
+	}
+		 
  
 	private static void creteEmptyLine(Paragraph paragraph, int number) {
 		for (int i = 0; i < number; i++) {
@@ -92,6 +116,7 @@ public class GeneratePDF {
 		document.add(paragraph);
 		PdfPTable table = new PdfPTable(8);
 		table.setWidthPercentage(100);
+		
 		
  
 		PdfPCell c1 = new PdfPCell(new Phrase("Order ID"));
@@ -148,7 +173,7 @@ public class GeneratePDF {
 			   table.addCell(rs.getString("size"));
 	           table.addCell(rs.getString("subTotal"));
 			   table.addCell(rs.getString("Total"));
-			   SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+			   SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 			   table.addCell(simpleDateFormat.format(new Date()));
 			   table.addCell(rs.getString("status"));
 		   }
@@ -158,3 +183,4 @@ public class GeneratePDF {
 	}
  
 }
+
